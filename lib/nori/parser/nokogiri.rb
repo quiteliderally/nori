@@ -23,14 +23,13 @@ module Nori
 
           if href = (attributes["href"][1..-1] rescue nil)
             raise "Reference Error: #{href} is not a valid references" unless ref = references[href]
-            node = Nori::XMLReferenceNode.new(name, ref, stack.include?(ref))
+            node = Nori::XMLReferenceNode.new(name, ref)
           else
             node = Nori::XMLUtilityNode.new(name, attributes)
             if id = attributes["id"]
               references[id] = node
             end
           end
-          puts "pushing node #{node}"
           stack.push node
         end
 
