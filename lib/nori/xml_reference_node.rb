@@ -6,7 +6,9 @@ module Nori
 
     def initialize(name, obj)
       super(obj)
-      self.name = name
+      @name = name.tr("-", "_")
+      @name = @name.split(":").last if Nori.strip_namespaces?
+      @name = Nori.convert_tag(@name) if Nori.convert_tags?
       self.processed = false
     end
 
