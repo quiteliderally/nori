@@ -21,15 +21,20 @@ module Nori
         def start_element(name, attrs = [])
           attributes = Hash[*attrs.flatten]
 
-          if href = (attributes["href"][1..-1] rescue nil)
+          if href = (attributes["href"][1..-1] rescue nil)            
             raise "Reference Error: #{href} is not a valid references" unless ref = references[href]
-            node = Nori::XMLReferenceNode.new(name, ref)
-          else
+            unless stack.include? ref
+              node = ref
+            end
+          end
+
+          unless node
             node = Nori::XMLUtilityNode.new(name, attributes)
             if id = attributes["id"]
               references[id] = node
             end
           end
+
           stack.push node
         end
 
